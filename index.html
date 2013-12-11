@@ -4,17 +4,13 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<meta name = "format-detection" content = "telephone=no"/>
-	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery-2.0.3.min.js"></script>
 	<script src="js/jquery.mobile-1.3.2.min.js"></script>
-	<script src="js/functions.js"></script>
 	<link rel="stylesheet" href="styles/styles.css" />
 	<link rel="stylesheet" href="styles/jquery.mobile-1.3.2.min.css" />
 	<script>
 	// Start the app!
-	function onBodyLoad()	{	
-		console.log("Setting up event listener for 'deviceready'.");
-		document.addEventListener("deviceready", init, false);
-		console.log("deviceready should have been set up and init() should have been called. You will see another message if init() started.");
+	function onBodyLoad()	{
 		init(); // comment me in Xcode
 		$("#json").hide();
 		$("#listContainer").hide();
@@ -60,7 +56,7 @@
 						//support++;
 						description = "(" + support + ") " + feature.properties.description;
 					} else {
-						description = "(1) " + feature.properties.description;=
+						description = "(1) " + feature.properties.description;
 						support = 0;
 					}
 					date = feature.properties.created_datetime;
