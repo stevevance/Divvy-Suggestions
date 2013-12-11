@@ -1,0 +1,586 @@
+@charset "UTF-8";
+/* custom icons */
+.ui-icon-myapp-locateme {
+	background-image: url("../mapicons/icon_crosshair.svg");
+	background-size: 18px 18px;
+}
+.ui-icon-myapp-train {
+	background-image: url("../mapicons/icon_train.svg");
+	background-size: 18px 18px;
+}
+.ui-icon-myapp-downtown {
+	background: url("../mapicons/downtown_18x18.png") no-repeat rgba(0, 0, 0, 0.4)  !important;
+	background-size: 18px 18px;
+}
+.ui-icon-myapp-bookmark {
+	background-image: url("../mapicons/icon_bookmark.svg");
+	background-size: 18px 18px;
+}
+.ui-icon-myapp-cubs {
+	background-image: url("../mapicons/icon_cubs.svg");
+	background-size: 18px 18px;
+}
+.ui-icon-myapp-home {
+	background: url("../mapicons/home.png") no-repeat rgba(0, 0, 0, 0.4)  !important;
+/* 	background-size: 18px 18px; */
+}
+.ui-icon-myapp-cta {
+	background-image: url("../mapicons/icon_cta_toolbar.svg");
+	background-size: 19px 18px;
+}
+.ui-icon-myapp-metra {
+	background-image: url("../mapicons/icon_metra_toolbar.svg");
+	background-size: 19px 18px;
+}
+.ui-icon-myapp-bikesharing {
+	background-image: url("../mapicons/icon_divvy_toolbar.svg");
+	background-size: 19px 18px;
+}
+.ui-icon-myapp-map {
+	background-image: url("../mapicons/icon_map_toolbar.svg");
+ 	background-size: 18px 18px;
+}
+.ui-icon-myapp-otherstation {
+	background-image: url("../mapicons/icon_otherstation.svg");
+	background-size: 19px 17px;
+}
+.ui-icon-myapp-bike {
+	background-image: url("../mapicons/icon_bike_button.svg");
+	background-size: 19px 17px;
+}
+.ui-icon-myapp-tree {
+	background-image: url("../mapicons/icon_tree_button.svg");
+	background-size: 19px 17px;
+}
+.ui-icon-myapp-museum {
+	background-image: url("../mapicons/icon_museum_button.svg");
+	background-size: 18px 15px;
+}
+.ui-icon-myapp-cultural {
+	background-image: url("../mapicons/icon_culturalcenter_button.svg");
+	background-size: 18px 15px;
+}
+
+/* iPhone 4, 4S, 5, iPad 3, 4 -----------
+From http://css-tricks.com/snippets/css/media-queries-for-standard-devices/
+From https://gist.github.com/marcedwards/3446599
+ */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3) {
+	.ui-icon-myapp-locateme {
+		background-image: url("../mapicons/icon_crosshair.svg");
+		bbackground-size: 18px 18px;
+	}
+	.ui-icon-myapp-train {
+		background-image: url("../mapicons/icon_train.svg");
+		background-size: 18px 18px;
+	}
+	.ui-icon-myapp-downtown {
+		background-image: url("../mapicons/downtown_36x36.png");
+		background-size: 18px 18px;
+	}
+	.ui-icon-myapp-bookmark {
+		background-image: url("../mapicons/icon_bookmark.svg");
+		background-size: 18px 18px;
+	}
+	.ui-icon-myapp-cubs {
+		background-image: url("../mapicons/icon_cubs.svg");
+		background-size: 18px 18px;
+	}
+	.ui-icon-myapp-home {
+		background: url("../mapicons/home@2x.png") no-repeat rgba(0, 0, 0, 0.4)  !important;
+		background-size: 18px 18px;
+	}
+	.ui-icon-myapp-cta {
+		background-image: url("../mapicons/icon_cta_toolbar.svg");
+		background-size: 19px 18px;
+	}
+	.ui-icon-myapp-metra {
+		background-image: url("../mapicons/icon_metra_toolbar.svg");
+		background-size: 19px 18px;
+	}
+	.ui-icon-myapp-bikesharing {
+		background-image: url("../mapicons/icon_divvy_toolbar.svg");
+		background-size: 19px 18px;
+	}
+	.ui-icon-myapp-map {
+		background-image: url("../mapicons/icon_map_toolbar.svg");
+		background-size: 18px 18px;
+	}
+	.ui-icon-myapp-otherstation {
+		background-image: url("../mapicons/icon_otherstation.svg");
+		background-size: 19px 17px;
+	}
+	.ui-icon-myapp-bike {
+		background-image: url("../mapicons/icon_bike_button.svg");
+		background-size: 19px 17px;
+	}
+	.ui-icon-myapp-tree {
+		background-image: url("../mapicons/icon_tree_button.svg");
+		background-size: 19px 17px;
+	}
+	.ui-icon-myapp-museum {
+		background-image: url("../mapicons/icon_museum_button.svg");
+		background-size: 18px 15px;
+	}
+	.ui-icon-myapp-cultural {
+		background-image: url("../mapicons/icon_culturalcenter_button.svg");
+		background-size: 18px 15px;
+	}
+	.tweetWindow {
+		max-width: 600px;
+	}
+}
+
+/* homepage styles */
+#homepage_map {
+	height:130px;
+	z-index: 100;
+}
+#homepage_map_button {
+	z-index: 1;
+}
+#homepage_alerts {
+	width:100%;
+	height:30px;
+	clear:both;
+	padding:3px;
+}
+.homepage_alert {
+	min-width: 120px;
+	height: 30px;
+	line-height: 30px;
+	float:left;
+}
+.homepage_alert div {
+	padding-left:50px;
+}
+#cubs_button {
+	display: none;
+	background: url("../mapicons/icon_cubs_bw.svg");
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+}
+#weather_button {
+	display: none;
+	background: url("../mapicons/icon_raincloud.svg");
+	background-size: 30px 30px;
+	background-repeat: no-repeat;
+}
+#homepage_notices {
+	width:100%;
+	min-height:30px;
+	clear:both;
+	padding:8px 0 0 0;
+	line-height: 30px;
+}
+.homepage_notice {
+	min-height: 30px;
+	float:left;
+	line-height: 18px;
+	font-size: 95%;
+}
+/* location search stuff */
+#locationSearchText {
+	margin: 0 1em;
+}
+#locationSearchResults h4, #locationSearchResults h5 {
+	margin: 2pt 0;
+}
+#locationSearchResults p, #youAreHere p {
+	margin: -.5em 0 0em;
+}
+/* other styles */
+.no-padding {
+	padding:0;
+}
+.confirmed {
+	width:100%;
+	height:2em;
+}
+.confirmed p {
+	mmargin:1em;
+}
+.facebook_like {
+	width:160px;
+	min-height:160px;
+	float:right;
+}
+.facebook_not_like {
+	min-width:160px;
+	min-height: 160px;
+	float:left;
+}
+
+.lawBodyArea {
+	margin: 0 0 4px 0;
+}
+.lawBodyArea p {
+	padding-top:0;
+	margin-top:0;
+}
+.lawBreak {
+	display: block;
+	height: 10px;
+}
+
+.diyRepair {
+	width:100%;
+	min-height:208px;
+	background-image: url("../images/diy-bike-repair-stand.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 196px 208px;
+}
+.diyRepair img {
+	width:100%;
+	max-width:416px;
+}
+.divvyBike {
+	width:100%;
+	min-height:156px;
+	background-image: url("../images/divvy_bike.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 208px 156px;
+}
+.divvyBike img {
+	width:100%;
+	max-width:417px;
+}
+.bikeParkingLock {
+	width:100%;
+	min-height:148px;
+	background-image: url("../images/bike-with-cable-rack-decal.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 249px 148px;
+}
+.bikeParkingLock img {
+	width:100%;
+	max-width:296px;
+}
+.tallerList li {
+	margin-left:0;
+	margin-bottom: 0.6em;
+	padding-left:0;
+	line-height: 110%;
+}
+.tallerList ol, ul {
+	margin-left:0.5em;
+	padding-left:0;
+}
+.transitapps img {
+	wwidth:80%;
+	height:80%;
+	margin:5px 5px;
+}
+.list ul, .list ol, .list li {
+	line-height: 115%;
+	list-style: none;
+}
+.list li {
+	margin-bottom: 3px;
+}
+.weatherTemps {
+	margin-left:0;
+	padding-left:0;
+}
+.weatherTempSmall {
+	font-size: 60%;
+	vertical-align: super;
+}
+.halfsize {
+	width:36px;
+	height:46px;
+}
+.showing {
+	font-style: italic;
+}
+/* ----- */
+/* Begin Flickr */
+.hidden {
+	display:none;
+}
+#flickr_homescreen {
+	width:100%;
+	height:75px;
+	clear:both;
+}
+#flickrHeading {
+	text-align: left;
+	font-size: 110%;
+	font-weight: bold;
+}
+#flickrFeaturePhotos .slide {
+	margin:5px;
+	display: inline-table;
+}
+#flickrFeaturePhotos .flickrLoaded75, .flickrLoaded75 img {
+	height:75px;
+	width:75px;
+}
+#flickrFeaturePhotos .flickrLoaded150, .flickrLoaded150 img {
+	height:150px;
+	width:150px;
+}
+/*
+#fflickr_homescreen .fflickrImg {
+	float:left;
+	wwidth:33%;
+	margin:auto;
+	mmargin-right:5em;
+	text-align: center;
+}
+
+#flickrPhotosContainer {
+	width:100%;
+	ooverflow: hidden;
+}
+#flickrUl {
+	list-style: none;
+	margin: 0;
+}
+.flickrLoaded75 {
+	height:75px;
+	margin:1em 0;
+}
+.flickrLoaded75 img {
+	height:75px;
+	width:75px;
+	margin-right:10px;
+}
+.flickrLoaded150 {
+	height:150px;
+	margin:1em 0;
+}
+.flickrLoaded150 img {
+	height:150px;
+	width:150px;
+	margin-right:10px;
+}
+/* end Flickr */
+/* ----- */
+.small {
+	font-size:90%;
+}
+.addBookmarkLink {
+	font-size:120%;
+	font-weight:bold;
+	line-height:150%;
+}
+.bookmarkNameEmpty {
+	font-weight: bold;
+	color:#c34a4a;
+}
+.tweetWindow {
+	max-width: 300px;
+}
+.tweetWindow img {
+	padding: 3px 0;
+}
+.tweetImage {
+	width:40%;
+}
+.tweetWindowText {
+	font-size: 110%;
+}
+.infoWindowButtonsRow {
+	padding-top: 3px;
+}
+.legend {
+	width:100%;
+	max-width:600px;
+	margin-left:auto;
+	margin-right:auto;
+	display: block;
+}
+.legend-individual {
+	min-height:150px;
+}
+.getLitImage {
+	width:99%;
+	max-width:600px;
+	margin-left:auto;
+	margin-right:auto;
+	display: block;
+}
+.getLitImage_wider {
+	margin-left:auto;
+	margin-right:auto;
+	display: block;
+	height:auto;
+	width:100%;
+}
+.getLit_buttons img {
+	max-height:200px;
+	width:auto;
+	max-width: 100%;
+}
+.bookmarkPopupContainer {
+	max-width:350px;
+	font-size:100%;
+}
+.bookmarkPopupContainer p {
+	vertical-align:middle;
+}
+.bookmarkPopupContainer a:link {
+	text-decoration:none;
+}
+.userLocationPopupContainer, poiPopupContainer {
+	max-width:350px;
+	font-size:100%;
+}
+img.bookmarkPopup {
+	margin:3px 11px 0 0;
+	background-size: 30px 60px;
+	/*float:left;*/
+}
+
+/* Special app-specific CSS */
+* {
+	-webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+	-webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+	/*-webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+	-webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
+}
+form, input, textarea {
+	-webkit-user-select: text; /* prevent copy paste, to allow, change 'none' to 'text'  allow the user to input text in the fields */
+}
+.leaflet-popup-content, .allowCopyPaste {
+	-webkit-user-select: auto; /* prevent copy paste, to allow, change 'none' to 'text'  allow the user to copy the popup's address data */
+}
+.allowCopyPaste {
+	-webkit-user-select: auto; /* prevent copy paste, to allow, change 'none' to 'text'  allow the user to copy the popup's address data */
+}
+.allowCopyPaste p, .allowCopyPaste h1, .allowCopyPaste h2 {
+	-webkit-user-select: auto; /* prevent copy paste, to allow, change 'none' to 'text'  allow the user to copy the popup's address data */
+}
+.leaflet-popup-content a:link {
+}
+.leaflet-popup-content a:active {
+	ffont-weight:bold;
+	color:#036;
+}
+.leaflet-control-permalink {
+	display: none;
+	/* this hides the Permalink plugin's anchor link, which I can't figure out how to get rid of in its code */
+}
+/* --- */
+.clear {
+	clear:both;
+}
+.freeman {
+	line-height:140%;
+	width:290px;
+	height:160px;
+	float:left;
+}
+.col1 {
+	width:70px;
+	float:left;
+}
+.col2 {
+	width:220px;
+	float:left;
+}
+.arrow {
+	width:28px;
+	height:28px;
+}
+#lawyerJimImage {
+	width:290px;
+	height:235px;
+	background-image: url("../images/jimfreeman02d.jpg");
+	margin:0 auto;
+	display: block;
+}
+#lawyerJimImage a {
+	width:290px;
+	height:235px;
+	display: block;
+}
+/* wrap wide text blocks; jQuery Mobile cuts them off */
+.wrap-listitem p, .wrap-listitem h1, .wrap-listitem h2, .wrap-listitem h3 {
+	white-space: normal;
+}
+/* center objects */
+.centerWrapper {
+	text-align: center;
+	margin: 0 auto;
+}
+.centerWrapper * {
+	margin: 0 auto;
+}
+/* Cluster icons for map.js */
+.trainCluster {
+	width: 45px;
+	height: 45px;
+	background-image:url('../mapicons/icon_train_cluster.svg');
+	text-align: center;
+	font-size: 30px;
+	color:white;
+	line-height: 50px;
+	font-weight: bold;
+}
+.ctaCluster {
+	width: 50px;
+	height: 50px;
+	background-image:url('../mapicons/icon_cta_alex_111612.svg');
+	background-size: 50px 50px;
+	text-align: center;
+	font-size: 30px;
+	color:black;
+	line-height: 50px;
+	font-weight: bold;
+}
+.metraCluster {
+	width: 50px;
+	height: 50px;
+	background-image:url('../mapicons/icon_metra_alex_111612.svg');
+	background-size: 50px 50px;
+	text-align: center;
+	font-size: 30px;
+	color:black;
+	line-height: 50px;
+	font-weight: bold;
+}
+.trailCluster {
+	width: 50px;
+	height: 50px;
+	background-image:url('../mapicons/icon_trail_cluster_alex.svg');
+	background-size: 50px 50px;
+	text-align: center;
+	font-size: 30px;
+	color:white;
+	line-height: 50px;
+	font-weight: bold;
+}
+.twitterCluster {
+	width: 50px;
+	height: 50px;
+	background-image:url('../mapicons/icon_twitter_cluster.svg');
+	background-size: 50px 50px;
+	text-align: center;
+	font-size: 30px;
+	line-height: 50px;
+	font-weight: bold;
+}
+.toggles label {
+	float:left;
+	width: 70%;
+}
+
+@media only screen 
+and (min-width : 768px) {
+	#lawyerJimImage {
+		width:580px;
+		height:235px;
+		background-image: url("../images/jimfreeman_wide.jpg");
+		margin:0 auto;
+	}
+	#lawyerJimImage a {
+		width:580px;
+		height:235px;
+		display: block;
+	}
+}

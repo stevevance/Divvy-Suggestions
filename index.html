@@ -1,0 +1,128 @@
+<html>
+<head>
+	<title>Divvy Suggestions</title>	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<meta name = "format-detection" content = "telephone=no"/>
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/functions.js"></script>
+	<link rel="stylesheet" href="styles/styles.css" />
+	<link rel="stylesheet" href="styles/jquery.mobile-1.3.2.min.css" />
+	<script>
+	// Start the app!
+	function onBodyLoad()	{	
+		console.log("Setting up event listener for 'deviceready'.");
+		document.addEventListener("deviceready", init, false);
+		console.log("deviceready should have been set up and init() should have been called. You will see another message if init() started.");
+		init(); // comment me in Xcode
+		$("#json").hide();
+		$("#listContainer").hide();
+	}
+	
+	function init() {
+		console.log("init() has been called");
+		getUrl(url);
+		//$('#listview').html(''); 
+	}
+	
+	function sortJSON(data, key, way) {
+		// code from http://stackoverflow.com/a/14949429
+	    return data.sort(function(a, b) {
+	        var x = a[key]; var y = b[key];
+	        if (way === '123' ) { return ((x < y) ? -1 : ((x > y) ? 1 : 0)); }
+	        if (way === '321') { return ((x > y) ? -1 : ((x < y) ? 1 : 0)); }
+	    });
+	}
+	
+	var url = "http://shareaboutsapi2.herokuapp.com/api/v2/divvy/datasets/divvy/places?include_submissions";
+	var total,next,description,support,id,date,station;
+	var downloaded = 0;
+	var stationsCounter = 0;
+	var stations = [];
+	var stationsSorted;
+	
+	function getUrl(url) {
+		console.log("Getting URL: " + url);
+		$.getJSON(url, function(data) {
+			total = data.metadata.length-300;
+			//$("#total").html(total + " stations suggested.");
+			next = data.metadata.next;
+			$.each(data.features, function(i, feature) {
+				if(feature.properties.location_type == "new-suggestion") {
+					id = feature.properties.id;
+					lat = feature.geometry.coordinates[1];
+					lng = feature.geometry.coordinates[0];
+					if(feature.properties.submission_sets.support) {
+						support = feature.properties.submission_sets.support.length;
+					}
+					if(support > 1) {
+						//support++;
+						description = "(" + support + ") " + feature.properties.description;
+					} else {
+						description = "(1) " + feature.properties.description;=
+						support = 0;
+					}
+					date = feature.properties.created_datetime;
+					
+					// build the station and add it to the stations array
+					station = {id:id,support:support,description:description,date:date,lat:lat,lng:lng}
+					stations.push(station);
+					support = "";
+					stationsCounter++;
+									
+					$("#total").html(stationsCounter);
+				} // end if
+			}); // end each
+			
+			// sort the stations
+			//popularStationsSorted = popularStations.support.sort(function(a,b){return a-b});
+			stationsSorted = sortJSON(stations,'support', '321'); // 123 or 321
+			//console.log(stationsSorted);
+						
+			// do these things when all lists have finished downloading
+			if(next && next.length > 0) {
+				if(downloaded < -1) { // stop at 5 for testing purposes
+					$("#progress").html("Finished downloading list!");
+					finished();
+					return false;
+				}
+				downloaded++;
+				getUrl(next);
+				$("#iteration").html(downloaded)
+			} else {
+				$("#progress").html("Finished downloading list!");
+				finished();
+			}
+		});
+	}
+	
+	function finished() {
+		var json = JSON.stringify(stations);
+		$("#json").val(json);
+		$("#json").show();
+		
+		$.each(stationsSorted, function(i, feature) {
+			$('#listview').append("<li><a href='http://suggest.divvybikes.com/place/" + feature.id + "' target='_blank'>" + feature.description + "</a></li>");
+		});
+		$("#listview").listview ("refresh");
+		$("#listContainer").show();
+	}
+	</script>
+</head>
+<body onload="onBodyLoad()">
+	<div data-role="page" id="page">
+		<div data-role="content" id="content" class="small">
+			<h1>Where are people suggesting Divvy stations?</h1>
+			<p>Divvy and the Chicago Department of Transportation are <a href="http://chi.streetsblog.org/2013/12/10/new-site-helps-you-suggest-locations-for-up-to-250-more-divvy-stations/">soliciting input</a> for the next 175 Divvy bike-share station locations. Created by <a href="http://twitter.com/stevevance">Steven Vance</a>.</p>
+			<p id="progress">Loading...<span id="iteration"></span> lists downloaded</p>
+			<textarea id="json"></textarea>
+			<br />
+			<div id="listContainer">
+				<p><span id="total">0</span> total stations suggested, sorted by number of supporters.</p>
+				<ul data-filter-placeholder="Search suggested Divvy locations..." data-role="listview" data-inset="false" class="" id="listview" data-filter="true"><li>Most recent suggestions are first</li></ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
