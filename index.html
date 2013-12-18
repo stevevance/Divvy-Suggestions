@@ -31,8 +31,8 @@
 	    });
 	}
 	
-	var url = "http://shareaboutsapi2.herokuapp.com/api/v2/divvy/datasets/divvy/places?include_submissions";
-	var url = "php/getsuggestions.php?action=getjson";
+	//var url = "http://shareaboutsapi2.herokuapp.com/api/v2/divvy/datasets/divvy/places?include_submissions";
+	var url = "http://divvy.bikechi.com/php/getsuggestions.php?action=getjson";
 	var total,next,description,support,id,date,station;
 	var downloaded = 0;
 	var stationsCounter = 0;
@@ -41,39 +41,42 @@
 	
 	function getUrl(url) {
 		console.log("Getting URL: " + url);
-		$.getJSON(url, function(data) {
-			total = data.length;
-			//$("#total").html(total + " stations suggested.");
-			//next = data.metadata.next;
-			$.each(data, function(i, feature) {
-				id = feature[0];
-				lat = feature[4];
-				lng = feature[5];
-				if(feature[1]) {
-					support = feature[1];
-				}
-				if(support > 1) {
-					//support++;
-					description = "(" + support + ") " + feature[2];
-				} else {
-					description = "(1) " + feature[2];
-					support = 0;
-				}
-				date = feature[3];
+		$.getJSON(url)
+			.done( function(data) {
+				console.log("Looks like we got the URL just fine");
+				total = data.length;
+				console.log(data);
+				//$("#total").html(total + " stations suggested.");
+				//next = data.metadata.next;
+				$.each(data.data, function(i, feature) {
+					id = feature.id;
+					lat = feature.lat;
+					lng = feature.lng;
+					if(feature.s) {
+						support = feature.s;
+					}
+					if(support > 1) {
+						//support++;
+						description = "(" + support + ") " + feature.d;
+					} else {
+						description = "(1) " + feature.d;
+						support = 0;
+					}
+					date = feature.t;
+					
+					// build the station and add it to the stations array
+					station = {id:id,support:support,description:feature.d,date:date,lat:lat,lng:lng}
+					stations.push(station);
+					support = "";
+					stationsCounter++;
+									
+					$("#total").html(stationsCounter);
+				}); // end each
 				
-				// build the station and add it to the stations array
-				station = {id:id,support:support,description:description,date:date,lat:lat,lng:lng}
-				stations.push(station);
-				support = "";
-				stationsCounter++;
-								
-				$("#total").html(stationsCounter);
-			}); // end each
-			
-			// sort the stations
-			//popularStationsSorted = popularStations.support.sort(function(a,b){return a-b});
-			stationsSorted = sortJSON(stations,'support', '321'); // 123 or 321
-			//console.log(stationsSorted);
+				// sort the stations
+				//popularStationsSorted = popularStations.support.sort(function(a,b){return a-b});
+				stationsSorted = sortJSON(stations,'support', '321'); // 123 or 321
+				//console.log(stationsSorted);
 						
 			// do these things when all lists have finished downloading
 			if(stationsCounter == total) {
@@ -82,18 +85,22 @@
 				return false;
 			} else {
 				$("#progress").html("Finished downloading suggestion lists!");
-				finished();
+				finished(data);
 			}
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			console.log("Looks like something failed: text status: " + textStatus + "; error thrown: " + errorThrown);
+			console.log(jqXHR);
 		});
 	}
 	
-	function finished() {
-		var json = JSON.stringify(stations);
+	function finished(data) {
+		var json = JSON.stringify(data);
 		$("#json").val(json);
 		$("#json").show();
 		
 		$.each(stationsSorted, function(i, feature) {
-			$('#listview').append("<li><a href='http://suggest.divvybikes.com/place/" + feature.id + "' target='_blank'>" + feature.description + "</a></li>");
+			$('#listview').append("<li><a href='http://suggest.divvybikes.com/place/" + feature.id + "' target='_blank'> (" + feature.support + ") " + feature.description + "</a></li>");
 		});
 		$("#listview").listview ("refresh");
 		$("#listContainer").show();
