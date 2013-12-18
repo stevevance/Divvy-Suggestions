@@ -1,6 +1,6 @@
 <?php
 //error_reporting(0);
-ini_set('memory_limit','96M');
+ini_set('memory_limit','128M');
 
 require_once("RollingCurl.php");
 
@@ -24,6 +24,8 @@ $stations_count = 0;
 $suggested_stations = array();
 
 function getFirstPage() {
+	$time_start = microtime(true);
+	echo "<p>Going to get the first URL to check how many pages we will have to load...</p>";
 	// Initializing curl
 	$url = "http://shareaboutsapi2.herokuapp.com/api/v2/divvy/datasets/divvy/places?location_type=new-suggestion&include_submissions=";
 	$ch = curl_init( $url );
@@ -42,40 +44,53 @@ function getFirstPage() {
 	$data = json_decode($data);
 	
 	$length = $data->{"metadata"}->{"length"};
+	if($length > 0) {
 	
-	$pages = ceil($length/50);
-	echo "<p>Downloading $pages pages to catch $length suggested Divvy locations...</p>";
+		$pages = ceil($length/50);
+		echo "<p>Downloading $pages pages to catch $length suggested Divvy locations...</p>";
+		
+		$urls = array();
+		//array_push($urls, $url); // make sure to add the first page
+		
+		$i = 1;
 	
-	$urls = array();
-	//array_push($urls, $url); // make sure to add the first page
-	
-	$i = 1;
-
-	while($i < $pages+1) { // we just want to know how many URLs to push into the array
-		$page = "http://shareaboutsapi2.herokuapp.com/api/v2/divvy/datasets/divvy/places?location_type=new-suggestion&include_submissions=&page=$i";
-		array_push($urls, $page);
-		$i++;
+		while($i < $pages+1) { // we just want to know how many URLs to push into the array
+			$page = "http://shareaboutsapi2.herokuapp.com/api/v2/divvy/datasets/divvy/places?location_type=new-suggestion&include_submissions=&page=$i";
+			array_push($urls, $page);
+			$i++;
+		}
+		
+		echo "<ol>";
+		// create a new RollingCurl object and pass it the name of your custom callback function
+		$rc = new RollingCurl("request_callback");
+		// the window size determines how many simultaneous requests to allow.
+		$rc->window_size = 2;
+		foreach ($urls as $url) {
+		    // add each request to the RollingCurl object
+		    $request = new RollingCurlRequest($url);
+		    $rc->add($request);
+		}
+		$rc->execute();
+		echo "</ol>";
+		
+		sleep(1);
+		afterRequest();
+		$time_end = microtime(true);
+		$time = $time_end - $time_start;
+		echo "<p>Executed in $time seconds</p>";
+	} else {
+		echo "<p>Metadata length wasn't greater than 0</p>";
+		echo "<p><a href='$url'>when trying to get this URL</a></p>";
+		print_r($data);
 	}
-	
-	// create a new RollingCurl object and pass it the name of your custom callback function
-	$rc = new RollingCurl("request_callback");
-	// the window size determines how many simultaneous requests to allow.
-	$rc->window_size = 5;
-	foreach ($urls as $url) {
-	    // add each request to the RollingCurl object
-	    $request = new RollingCurlRequest($url);
-	    $rc->add($request);
-	}
-	$rc->execute();
-	
-	sleep(5);
-	afterRequest();
 }
 
 function request_callback($response, $info, $request) {
 	global $suggested_stations, $stations_count, $mysql;
 	$data = json_decode($response);
 	//print_r($data);
+	
+	//echo "<b>Another page of suggested Divvy stations was called</b>";
 	
 	//print_r($data->{"features"});
 	$suggestions = $data->{"features"};
@@ -85,7 +100,7 @@ function request_callback($response, $info, $request) {
 		$stations_count++;
 		//print_r($s);
 		$desc = $s->{"properties"}->{"description"};
-		$desc = mysqli_real_escape_string($mysql, $desc);
+		//$desc = mysqli_real_escape_string($mysql, $desc);
 		
 		$id = $s->{"properties"}->{"id"};
 		$time = $s->{"properties"}->{"created_datetime"};
@@ -100,9 +115,11 @@ function request_callback($response, $info, $request) {
 		$lat = $s->{"geometry"}->{"coordinates"}[1];
 		$lng = $s->{"geometry"}->{"coordinates"}[0];
 		
-		$station = array($id, $supporters, $desc, $time, $lat, $lng);
+		$station = array("id"=>$id, "s"=>$supporters, "d"=>$desc, "t"=>$time, "lat"=>$lat, "lng"=>$lng);
+		//echo "<li>" . $station["id"] ." has ". $station["s"] . " supporters</li>";
+		$suggested_stations[] = $station;
 		
-		array_push($suggested_stations, $station);
+		//array_push($suggested_stations, $station);
 	}
 	
 	//echo "<li>" . count($suggested_stations) . "</li>";
@@ -117,8 +134,8 @@ function afterRequest() {
 	
 	$json = json_encode($suggested_stations);
 	
-	echo "<p>The JSON follows...</p>";
-	echo $json;
+	//echo "<p>The JSON follows...</p>";
+	//echo $json;
 				
 	/* create a prepared statement */
 	$stmt = mysqli_stmt_init($mysql);
@@ -145,10 +162,12 @@ function afterRequest() {
 	mysqli_close($mysql);
 }
 
-if($_GET['action'] == "getjson") {
+if(isset($_GET['action']) && $_GET['action'] == "getjson") {
 	getJson();
-} else {
+} elseif(isset($_GET['action']) && $_GET['action'] == "getsuggestions") {
 	getFirstPage();	
+} else {
+	echo "<p><a href='?action=getsuggestions'>Get Suggested Stations!</a></p>";
 }
 
 function getJson() {
@@ -157,12 +176,13 @@ function getJson() {
 	header('content-type: application/json; charset=utf-8');
 	header("access-control-allow-origin: *");
 	
-	$sql = "SELECT data FROM divvy_suggestions ORDER BY id DESC LIMIT 1";
+	$sql = "SELECT data, datetime FROM divvy_suggestions ORDER BY datetime DESC LIMIT 1";
 	$result = mysqli_query($mysql, $sql);
 	$row = mysqli_fetch_array($result);
 	echo mysqli_error($mysql);	
 	
-	echo $row["data"];
+	
+	echo "{\"datetime\":\"".$row["datetime"] ."\",\"data\":" . $row["data"] . "}";
 	
 	/* close connection */
 	mysqli_close($mysql);
